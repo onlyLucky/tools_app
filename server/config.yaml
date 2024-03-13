@@ -1,0 +1,5 @@
+system:
+  env: dev # dev开发  pro生产  test测试
+  ip: 127.0.0.1
+  port: 8088
+  version: 1.0.1

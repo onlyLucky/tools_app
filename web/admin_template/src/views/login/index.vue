@@ -6,10 +6,18 @@
         <h4 class="loginSubtitle">界面美观组件丰富的中后台前端解决方案</h4>
       </div>
       <div class="loginBody">
-        <el-text type="heading" style="font-size: 24px;font-weight: bold; margin-bottom: 18px">
+        <el-text type="heading" style="font-size: 24px;font-weight: bold; margin-bottom: 18px;display: block;">
           用户登录
         </el-text>
-        <Segmented></Segmented>
+        <Segmented
+          v-model="tabActive"
+          :items="[
+            { label: '密码登录', value: 1 },
+            { label: '扫码登录', value: 2 },
+          ]"
+          style="margin-bottom: 18px"
+          @change="onTabChange"
+        />
         <el-form
           v-if="tabActive == 1"
           ref="formRef"
@@ -61,57 +69,75 @@
             </el-button>
           </el-form-item>
         </el-form>
+        <div v-else class="login-qrcode-group">
+          
+        </div>
       </div>
     </el-card>
     
   </div>
 </template>
 <script setup lang="ts">
-  import { ref, reactive } from 'vue';
-  import { User, Lock } from '@element-plus/icons-vue';
-  import { ProtectOutlined } from '@/components/icons';
-  import Segmented from '@/components/segmented/index.vue';
-  // 页签选中
-  const tabActive = ref(1);
-  // 表单
-  const formRef = ref();
-  // 加载状态
-  const loading = ref(false);
-  // 表单数据
-  const form = reactive({
-    username: 'admin',
-    password: 'admin123',
-    code: '',
-    uuid: '',
-    remember: true
-  });
-  // 表单验证规则
-  const rules = reactive({
-    username: [
-      {
-        required: true,
-        message: '请输入登录账号',
-        type: 'string',
-        trigger: 'blur'
-      }
-    ],
-    password: [
-      {
-        required: true,
-        message: '请输入登录密码',
-        type: 'string',
-        trigger: 'blur'
-      }
-    ],
-    code: [
-      {
-        required: true,
-        message: '请输入验证码',
-        type: 'string',
-        trigger: 'blur'
-      }
-    ]
-  })
+import { ref, reactive } from 'vue';
+import { User, Lock } from '@element-plus/icons-vue';
+import { ProtectOutlined } from '@/components/icons';
+import Segmented from '@/components/segmented/index.vue';
+// 页签选中
+const tabActive = ref(1);
+// 表单
+const formRef = ref();
+// 加载状态
+const loading = ref(false);
+// 表单数据
+const form = reactive({
+  username: 'admin',
+  password: 'admin123',
+  code: '',
+  uuid: '',
+  remember: true
+});
+// 表单验证规则
+const rules = reactive({
+  username: [
+    {
+      required: true,
+      message: '请输入登录账号',
+      type: 'string',
+      trigger: 'blur'
+    }
+  ],
+  password: [
+    {
+      required: true,
+      message: '请输入登录密码',
+      type: 'string',
+      trigger: 'blur'
+    }
+  ],
+  code: [
+    {
+      required: true,
+      message: '请输入验证码',
+      type: 'string',
+      trigger: 'blur'
+    }
+  ]
+})
+
+// 二维码
+const qrcode = ref("");
+
+  /* 刷新二维码 */
+const refreshQrCode = () => {
+  qrcode.value = `https://api.eleadmin.com/v2/auth/login?code=${new Date().getTime()}`;
+};
+
+  /* 选项卡切换事件 */
+  const onTabChange = (active: number) => {
+    if (active === 2) {
+      refreshQrCode();
+    }
+  };
   /* 跳转到首页 */
   /* const goHome = () => {
     const { query } = unref(currentRoute);
@@ -187,6 +213,19 @@
     flex-shrink: 0;
     padding: 32px 48px;
     box-sizing: border-box;
+
+    :deep(.el-checkbox) {
+      height: auto;
+
+      .el-checkbox__label {
+        color: inherit;
+      }
+    }
+
+    :deep(.el-input__prefix-inner > .el-icon) {
+      margin-right: 12px;
+      transform: scale(1.26) translateY(-1px);
+    }
   }
   /* 阿里巴巴普惠体 */
   @font-face {

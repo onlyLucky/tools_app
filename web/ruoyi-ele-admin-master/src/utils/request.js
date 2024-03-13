@@ -1,17 +1,17 @@
 /**
  * axios实例
  */
-import axios from 'axios';
-import { unref } from 'vue';
-import { ElMessageBox } from 'element-plus/es';
-import { API_BASE_URL, LAYOUT_PATH } from '@/config/setting';
-import router from '@/router';
-import { getToken } from './token-util';
-import { logout } from './common';
+import axios from "axios";
+import { unref } from "vue";
+import { ElMessageBox } from "element-plus/es";
+import { API_BASE_URL, LAYOUT_PATH } from "@/config/setting";
+import router from "@/router";
+import { getToken } from "./token-util";
+import { logout } from "./common";
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: API_BASE_URL
+  baseURL: API_BASE_URL,
 });
 
 /**
@@ -28,7 +28,7 @@ service.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 /**
@@ -41,16 +41,16 @@ service.interceptors.response.use(
       const { path, fullPath } = unref(router.currentRoute);
       if (path == LAYOUT_PATH) {
         logout(true, void 0, router.push);
-      } else if (path !== '/login') {
+      } else if (path !== "/login") {
         ElMessageBox.close();
-        ElMessageBox.alert('登录状态已过期, 请退出重新登录!', '系统提示', {
-          confirmButtonText: '重新登录',
+        ElMessageBox.alert("登录状态已过期, 请退出重新登录!", "系统提示", {
+          confirmButtonText: "重新登录",
           callback: (action) => {
-            if (action === 'confirm') {
+            if (action === "confirm") {
               logout(false, fullPath);
             }
           },
-          draggable: true
+          draggable: true,
         });
       }
       return Promise.reject(new Error(res.data.msg));
@@ -59,7 +59,7 @@ service.interceptors.response.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 export default service;

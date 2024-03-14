@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@ant-design/colors':
+    specifier: ^7.0.2
+    version: 7.0.2
   '@element-plus/icons-vue':
     specifier: ^2.3.1
     version: 2.3.1(vue@3.4.20)
@@ -26,6 +29,9 @@ dependencies:
   qrcode:
     specifier: ^1.5.3
     version: 1.5.3
+  qrcode-svg:
+    specifier: ^1.1.0
+    version: 1.1.0
   sortablejs:
     specifier: ^1.15.2
     version: 1.15.2
@@ -49,6 +55,9 @@ devDependencies:
   '@types/qrcode':
     specifier: ^1.5.5
     version: 1.5.5
+  '@types/qrcode-svg':
+    specifier: ^1.1.4
+    version: 1.1.4
   '@vitejs/plugin-vue':
     specifier: ^5.0.4
     version: 5.0.4(vite@5.1.4)(vue@3.4.20)
@@ -72,6 +81,12 @@ devDependencies:
     version: 1.8.27(typescript@5.3.3)
 
 packages:
+
+  /@ant-design/colors@7.0.2:
+    resolution: {integrity: sha512-7KJkhTiPiLHSu+LmMJnehfJ6242OCxSlR3xHVBecYxnMW8MS/878NXct1GqYARyL59fyeFdKRxXTfvR9SnDgJg==}
+    dependencies:
+      '@ctrl/tinycolor': 3.6.1
+    dev: false
 
   /@antfu/utils@0.7.7:
     resolution: {integrity: sha512-gFPqTG7otEJ8uP6wrhDv6mqwGWYZKNvAcCq6u9hOj0c+IKCEsY4L1oC9trPq2SaWIzAfHvqfBDxF591JkMf+kg==}
@@ -510,6 +525,10 @@ packages:
 
   /@types/nprogress@0.2.3:
     resolution: {integrity: sha512-k7kRA033QNtC+gLc4VPlfnue58CM1iQLgn1IMAU8VPHGOj7oIHPp9UlhedEnD/Gl8evoCjwkZjlBORtZ3JByUA==}
+    dev: true
+
+  /@types/qrcode-svg@1.1.4:
+    resolution: {integrity: sha512-gh+atEBHXpU5iO72Tg4q03YdGKoY0zH1Yr4mGl+NSzFpyPuJcgurs8F3aRpH0Gs93GFuB1rDoQj6U4Xshn72PA==}
     dev: true
 
   /@types/qrcode@1.5.5:
@@ -1234,6 +1253,11 @@ packages:
 
   /proxy-from-env@1.1.0:
     resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
+    dev: false
+
+  /qrcode-svg@1.1.0:
+    resolution: {integrity: sha512-XyQCIXux1zEIA3NPb0AeR8UMYvXZzWEhgdBgBjH9gO7M48H9uoHzviNz8pXw3UzrAcxRRRn9gxHewAVK7bn9qw==}
+    hasBin: true
     dev: false
 
   /qrcode@1.5.3:

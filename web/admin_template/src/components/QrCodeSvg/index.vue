@@ -4,14 +4,15 @@
   </div>
 </template>
 <script setup lang="ts">
-import QRCode from "qrcode"
+import QRCode from "qrcode-svg"
+import { ElMessage } from 'element-plus'
 import { onMounted, ref, watch } from "vue";
 const props = defineProps({
   size:{
     type: Number,
     default: 200
   },
-  items: {
+  padding: {
     type: Number,
     default: 5
   },
@@ -29,29 +30,20 @@ watch(
     if (newValue) {
       try {
         // 生成二维码的 SVG 元素
+        qrCodeSvg.value = new QRCode({
+          content: newValue,
+          width: props.size,
+          height: props.size,
+          padding: props.padding,
+        }).svg();
       } catch (error) {
-        console.error('Error generating QR code:', error);
+        ElMessage.error('生成二维码错误:'+ error);
       }
     }
   },
   { immediate: true }
 );
 
-const generateQRCode = ()=> {
-  QRCode.toDataURL(props.value, (err, dataUrl) => {
-    if (err) {
-      console.error('Error generating QR code:', err);
-      return;
-    }
-    // 从 data URL 中提取 SVG 部分
-    const svgMatch = dataUrl.match(/svg:svg[^`]*/);
-    if (svgMatch && svgMatch[0]) {
-      qrCodeSvg.value = svgMatch[0];
-    } else {
-      console.error('Failed to extract SVG from data URL');
-    }
-  });
-}
 
 onMounted(() => {
   // 如果需要，可以在这里执行额外的 DOM 操作，例如添加或移除事件监听器

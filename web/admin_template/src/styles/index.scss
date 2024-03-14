@@ -40,6 +40,11 @@ body {
   padding-bottom: 0 !important;
 }
 
+/* Message组件样式优化  --el-box-shadow-light*/
+.el-message{
+  box-shadow: var(--el-box-shadow-dark);
+}
+
 /* echarts */
 .echarts > div > div {
   max-width: 100%;

@@ -2,13 +2,18 @@
  * 主题状态管理
  */
 import { defineStore } from 'pinia';
-import { changeColor } from 'ele-admin-plus/es/utils/theme-util';
+import { changeColor } from '@/utils/theme-util.ts';
 import { THEME_CACHE_NAME, TAB_KEEP_ALIVE } from '@/config/setting';
 
 /**
  * 默认值
  */
-const DEFAULT_STATE = Object.freeze({
+
+interface DefaultStateType {
+  [key: string]: any; // 或者使用具体类型的联合，如 string | number | boolean
+}
+
+const DEFAULT_STATE: DefaultStateType = Object.freeze({
   // 页签数据
   tabs: [],
   // 是否折叠侧栏
@@ -74,7 +79,7 @@ function getCacheSetting() {
 /**
  * 缓存配置
  */
-function cacheSetting(key, value) {
+function cacheSetting(key: string, value: any) {
   const cache = getCacheSetting();
   if (cache[key] !== value) {
     cache[key] = value;
@@ -85,8 +90,8 @@ function cacheSetting(key, value) {
 /**
  * 切换主题
  */
-function changeTheme(value, dark) {
-  return new Promise((resolve, reject) => {
+function changeTheme(value: string | undefined, dark: boolean): Promise<void> {
+  return new Promise<void>((resolve, reject) => {
     try {
       changeColor(value, dark);
       resolve();
@@ -94,6 +99,29 @@ function changeTheme(value, dark) {
       reject(e);
     }
   });
+}
+
+/* 页签栏单个对象类型 */
+export interface TabItemType {
+  closable: boolean;
+  components: string[];
+  fullPath: string;
+  home: boolean;
+  refresh: any;
+  key: string;
+  meta: {
+    hide: boolean;
+    icon: string;
+    keepAlive: boolean;
+    link: null | any;
+    iframe?: string;
+    noCache: boolean;
+    routePath: undefined | any;
+    title: string;
+
+  };
+  path: string;
+  title: string;
 }
 
 export const useThemeStore = defineStore({
@@ -116,7 +144,7 @@ export const useThemeStore = defineStore({
         return [];
       }
       const components = new Set();
-      this.tabs.forEach((t) => {
+      this.tabs.forEach((t: TabItemType) => {
         if (t.meta?.keepAlive !== false && !t.refresh && t.components) {
           t.components.forEach((c) => {
             if (typeof c === 'string' && c) {
@@ -129,89 +157,89 @@ export const useThemeStore = defineStore({
     }
   },
   actions: {
-    setTabs(value) {
+    setTabs(value: TabItemType[]) {
       this.tabs = value;
-      console.log('this.tabs:', this.tabs);
       //cacheSetting('tabs', value);
     },
-    setCollapse(value) {
+    setCollapse(value: boolean) {
       this.collapse = value;
     },
-    setCompact(value) {
+    setCompact(value: boolean) {
       this.compact = value;
     },
-    setMaximized(value) {
+    setMaximized(value: boolean) {
       this.maximized = value;
     },
-    setTabBar(value) {
+    setTabBar(value: boolean) {
       this.tabBar = value;
       cacheSetting('tabBar', value);
     },
-    setLayout(value) {
+    setLayout(value: string) {
       this.layout = value;
       cacheSetting('layout', value);
     },
-    setSidebarLayout(value) {
+    setSidebarLayout(value: string) {
       this.sidebarLayout = value;
       cacheSetting('sidebarLayout', value);
     },
-    setHeaderStyle(value) {
+    setHeaderStyle(value: string) {
       this.headerStyle = value;
       cacheSetting('headerStyle', value);
     },
-    setSidebarStyle(value) {
+    setSidebarStyle(value: string) {
       this.sidebarStyle = value;
       cacheSetting('sidebarStyle', value);
     },
-    setTabStyle(value) {
+    setTabStyle(value: string) {
       this.tabStyle = value;
       cacheSetting('tabStyle', value);
     },
-    setFixedHeader(value) {
+    setFixedHeader(value: boolean) {
       this.fixedHeader = value;
       cacheSetting('fixedHeader', value);
     },
-    setFixedSidebar(value) {
+    setFixedSidebar(value: boolean) {
       this.fixedSidebar = value;
       cacheSetting('fixedSidebar', value);
     },
-    setFixedBody(value) {
+    setFixedBody(value: boolean) {
       this.fixedBody = value;
       cacheSetting('fixedBody', value);
     },
-    setFluid(value) {
+    setFluid(value: boolean) {
       this.fluid = value;
       cacheSetting('fluid', value);
     },
-    setLogoInHeader(value) {
+    setLogoInHeader(value: boolean) {
       this.logoInHeader = value;
       cacheSetting('logoInHeader', value);
     },
-    setColorfulIcon(value) {
+    setColorfulIcon(value: boolean) {
       this.colorfulIcon = value;
       cacheSetting('colorfulIcon', value);
     },
-    setUniqueOpened(value) {
+    setUniqueOpened(value: boolean) {
       this.uniqueOpened = value;
       cacheSetting('uniqueOpened', value);
     },
-    setFixedHome(value) {
+    setFixedHome(value: boolean) {
       this.fixedHome = value;
       cacheSetting('fixedHome', value);
     },
-    setTransitionName(value) {
+    setTransitionName(value: string) {
       this.transitionName = value;
       cacheSetting('transitionName', value);
     },
-    setContentWidth(value) {
+    setContentWidth(value: any) {
       this.contentWidth = value;
     },
     /**
      * 切换暗黑模式
      * @param value 是否是暗黑模式
      */
-    setDarkMode(value) {
-      return new Promise((resolve, reject) => {
+    setDarkMode(value: boolean): Promise<void> {
+      return new Promise<void>((resolve, reject) => {
+        // void 0 赋一个 “空” 值 类似于undefined
         changeTheme(void 0, value)
           .then(() => {
             this.darkMode = value;
@@ -238,8 +266,8 @@ export const useThemeStore = defineStore({
      * 添加页签或更新页签数据
      * @param data 页签数据
      */
-    tabAdd(data) {
-      const i = this.tabs.findIndex((d) => d.key === data.key);
+    tabAdd(data: TabItemType) {
+      const i = this.tabs.findIndex((d: TabItemType) => d.key === data.key);
       if (i === -1) {
         this.setTabs([...this.tabs, data]);
       } else if (data.fullPath !== this.tabs[i].fullPath) {
@@ -251,9 +279,9 @@ export const useThemeStore = defineStore({
     /**
      * 关闭页签
      */
-    async tabRemove({ key, active }) {
-      console.log('tabRemove', key, active);
-      const i = this.tabs.findIndex((t) => t.key === key || t.fullPath === key);
+    async tabRemove({ key, active }: { key: string, active: string }) {
+
+      const i = this.tabs.findIndex((t: TabItemType) => t.key === key || t.fullPath === key);
       if (i === -1) {
         return {};
       }
@@ -262,14 +290,13 @@ export const useThemeStore = defineStore({
         return Promise.reject();
       }
       const path = this.tabs[i + (i === 0 ? 1 : -1)]?.fullPath;
-      this.setTabs(this.tabs.filter((_d, j) => j !== i));
+      this.setTabs(this.tabs.filter((_d: TabItemType, j: number) => j !== i));
       return t.key === active ? { path, home: !path } : {};
     },
     /**
      * 关闭左侧页签
      */
-    async tabRemoveLeft({ key, active }) {
-      console.log('tabRemoveLeft', key, active);
+    async tabRemoveLeft({ key, active }: { key: string, active: string }) {
       let index = -1; // 选中页签的索引
       for (let i = 0; i < this.tabs.length; i++) {
         if (this.tabs[i].key === active) {
@@ -279,7 +306,7 @@ export const useThemeStore = defineStore({
           if (i === 0) {
             break;
           }
-          const temp = this.tabs.filter((d, j) => !d.closable && j < i);
+          const temp = this.tabs.filter((d: TabItemType, j: number) => !d.closable && j < i);
           if (temp.length === i) {
             break;
           }
@@ -293,8 +320,7 @@ export const useThemeStore = defineStore({
     /**
      * 关闭右侧页签
      */
-    async tabRemoveRight({ key, active }) {
-      console.log('tabRemoveRight', key, active);
+    async tabRemoveRight({ key, active }: { key: string, active: string }) {
       let index = -1; // 选中页签的索引
       for (let i = 0; i < this.tabs.length; i++) {
         if (this.tabs[i].key === active) {
@@ -304,7 +330,7 @@ export const useThemeStore = defineStore({
           if (i === this.tabs.length - 1) {
             break;
           }
-          const temp = this.tabs.filter((d, j) => !d.closable && j > i);
+          const temp = this.tabs.filter((d: TabItemType, j: number) => !d.closable && j > i);
           if (temp.length === this.tabs.length - i - 1) {
             break;
           }
@@ -318,10 +344,9 @@ export const useThemeStore = defineStore({
     /**
      * 关闭其它页签
      */
-    async tabRemoveOther({ key, active }) {
-      console.log('tabRemoveOther', key, active);
+    async tabRemoveOther({ key, active }: { key: string, active: string }) {
       let path; // 关闭后跳转的地址
-      const temps = this.tabs.filter((d) => {
+      const temps = this.tabs.filter((d: TabItemType) => {
         if (d.key === key) {
           path = d.fullPath;
         }
@@ -336,18 +361,18 @@ export const useThemeStore = defineStore({
     /**
      * 关闭全部页签
      */
-    async tabRemoveAll({ active }) {
+    async tabRemoveAll({ active }: { active: string }) {
       if (this.tabs.length === 1 && this.tabs[0].home) {
         return Promise.reject();
       }
-      const temps = this.tabs.filter((d) => !d.closable);
+      const temps = this.tabs.filter((d: TabItemType) => !d.closable);
       if (temps.length === this.tabs.length) {
         return Promise.reject();
       }
-      const t = active ? this.tabs.find((d) => d.key === active) : void 0;
+      const t = active ? this.tabs.find((d: TabItemType) => d.key === active) : void 0;
       const jump = t != null && t.closable === true; // 关闭后是否跳转
       if (!temps.length) {
-        const h = this.tabs.find((d) => d.home);
+        const h = this.tabs.find((d: TabItemType) => d.home);
         if (!h) {
           this.setTabs([]);
           return { home: true };
@@ -362,12 +387,12 @@ export const useThemeStore = defineStore({
      * 修改页签
      * @param data 页签数据
      */
-    tabSetItem(data) {
+    tabSetItem(data: TabItemType) {
       if (!data.key && !data.fullPath) {
         if (!data.path) {
           return;
         }
-        this.tabs.forEach((d) => {
+        this.tabs.forEach((d: TabItemType) => {
           if (data.path === d.path) {
             this.tabSetItem({ ...data, key: d.key });
           }
@@ -375,7 +400,7 @@ export const useThemeStore = defineStore({
         return;
       }
       const k = data.key ? 'key' : 'fullPath';
-      const i = this.tabs.findIndex((d) => data[k] === d[k]);
+      const i = this.tabs.findIndex((d: TabItemType) => data[k] === d[k]);
       if (i === -1) {
         return;
       }

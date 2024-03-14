@@ -1,12 +1,18 @@
 import { unref } from 'vue';
 import { useRouter } from 'vue-router';
-import { EleMessage } from 'ele-admin-plus/es';
-import { useThemeStore } from '@/store/modules/theme';
+import { ElMessage } from 'element-plus';
+import { useThemeStore, TabItemType } from '@/store/modules/theme';
 import { HOME_PATH, LAYOUT_PATH, REDIRECT_PATH } from '@/config/setting';
 
 /**
  * 页签操作hook
  */
+
+interface OptionType {
+  key: string;
+  active: string
+}
+
 export const usePageTab = function () {
   const HOME_ROUTE = HOME_PATH || LAYOUT_PATH;
   const { push, replace, currentRoute } = useRouter();
@@ -15,8 +21,7 @@ export const usePageTab = function () {
   /**
    * 刷新当前路由
    */
-  const reloadPageTab = (option) => {
-    console.log('reloadPageTab:===', option);
+  const reloadPageTab = (option: { fullPath: string } | undefined) => {
     const { path, fullPath, query } = unref(currentRoute);
     if (path.includes(REDIRECT_PATH)) {
       return;
@@ -46,14 +51,14 @@ export const usePageTab = function () {
   /**
    * 关闭指定页签
    */
-  const removePageTab = (option) => {
+  const removePageTab = (option: OptionType) => {
     themeStore
       .tabRemove(option)
       .then((result) => {
         onRemoveDone(result);
       })
       .catch(() => {
-        EleMessage.error('当前页签不可关闭');
+        ElMessage.error('当前页签不可关闭');
       });
   };
 
@@ -68,7 +73,7 @@ export const usePageTab = function () {
         onRemoveDone(result);
       })
       .catch(() => {
-        EleMessage.error('左侧没有可关闭的页签');
+        ElMessage.error('左侧没有可关闭的页签');
       });
   };
 
@@ -82,7 +87,7 @@ export const usePageTab = function () {
         onRemoveDone(result);
       })
       .catch(() => {
-        EleMessage.error('右侧没有可关闭的页签');
+        ElMessage.error('右侧没有可关闭的页签');
       });
   };
 
@@ -96,7 +101,7 @@ export const usePageTab = function () {
         onRemoveDone(result);
       })
       .catch(() => {
-        EleMessage.error('没有可关闭的页签');
+        ElMessage.error('没有可关闭的页签');
       });
   };
 
@@ -110,12 +115,12 @@ export const usePageTab = function () {
         onRemoveDone(result);
       })
       .catch(() => {
-        EleMessage.error('没有可关闭的页签');
+        ElMessage.error('没有可关闭的页签');
       });
   };
 
   /**
-   * 页签移除方法完成操作
+   * 页签移除方法完成操作 :{path: string, home: string}| Record<string, never>
    */
   const onRemoveDone = ({ path, home }) => {
     if (path) {

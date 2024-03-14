@@ -70,7 +70,18 @@
           </el-form-item>
         </el-form>
         <div v-else class="login-qrcode-group">
-          
+          <QrCodeSvg
+            :size="180"
+            :padding="2"
+            :value="qrcode"
+            class="login-qrcode"
+          />
+          <div style="margin-top: 16px; cursor: pointer" @click="refreshQrCode">
+            <el-icon :size="17" style="vertical-align: -3px; margin-right: 6px">
+              <refresh-right />
+            </el-icon>
+            <span>刷新二维码</span>
+          </div>
         </div>
       </div>
     </el-card>
@@ -79,9 +90,11 @@
 </template>
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
-import { User, Lock } from '@element-plus/icons-vue';
+import { User, Lock, RefreshRight } from '@element-plus/icons-vue';
 import { ProtectOutlined } from '@/components/icons';
 import Segmented from '@/components/segmented/index.vue';
+import QrCodeSvg from "@/components/QrCodeSvg/index.vue";
+import { ElMessage } from 'element-plus'
 // 页签选中
 const tabActive = ref(1);
 // 表单
@@ -144,7 +157,9 @@ const refreshQrCode = () => {
     goHomeRoute(query.from);
   }; */
   /* 提交 */
-  const submit = () => {};
+  const submit = () => {
+    ElMessage.success("submit")
+  };
 </script>
 <style lang="scss" scoped>
   /* ::v-deep .ele-card-body {

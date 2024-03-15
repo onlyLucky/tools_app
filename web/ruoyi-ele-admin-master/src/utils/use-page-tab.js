@@ -177,6 +177,7 @@ export const usePageTab = function () {
    * @param from 登录前的地址
    */
   const goHomeRoute = (from) => {
+    console.log('goHomeRoute:', from);
     replace(from ? decodeURIComponent(from) : HOME_ROUTE);
   };
 

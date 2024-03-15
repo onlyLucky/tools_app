@@ -31,11 +31,11 @@ export const usePageTab = function () {
       if (path.includes(REDIRECT_PATH)) {
         return;
       }
-      setPageTab({ fullPath, refresh: true });
+      setPageTab({ fullPath, refresh: true } as TabItemType);
       replace({ path: REDIRECT_PATH + path, query });
     } else {
       // 刷新指定页签
-      setPageTab({ fullPath: option.fullPath, refresh: true });
+      setPageTab({ fullPath: option.fullPath, refresh: true } as TabItemType);
       replace(REDIRECT_PATH + option.fullPath);
     }
   };
@@ -54,7 +54,7 @@ export const usePageTab = function () {
   const removePageTab = (option: OptionType) => {
     themeStore
       .tabRemove(option)
-      .then((result) => {
+      .then((result: any) => {
         onRemoveDone(result);
       })
       .catch(() => {
@@ -65,8 +65,7 @@ export const usePageTab = function () {
   /**
    * 关闭左侧页签
    */
-  const removeLeftPageTab = (option) => {
-    console.log('removeLeftPageTab', option);
+  const removeLeftPageTab = (option: { key: string, active: string }) => {
     themeStore
       .tabRemoveLeft(option)
       .then((result) => {
@@ -80,7 +79,7 @@ export const usePageTab = function () {
   /**
    * 关闭右侧页签
    */
-  const removeRightPageTab = (option) => {
+  const removeRightPageTab = (option: { key: string, active: string }) => {
     themeStore
       .tabRemoveRight(option)
       .then((result) => {
@@ -94,7 +93,7 @@ export const usePageTab = function () {
   /**
    * 关闭其它页签
    */
-  const removeOtherPageTab = (option) => {
+  const removeOtherPageTab = (option: { key: string, active: string }) => {
     themeStore
       .tabRemoveOther(option)
       .then((result) => {
@@ -108,7 +107,7 @@ export const usePageTab = function () {
   /**
    * 关闭全部页签
    */
-  const removeAllPageTab = (option) => {
+  const removeAllPageTab = (option: { key: string, active: string }) => {
     themeStore
       .tabRemoveAll(option)
       .then((result) => {
@@ -122,7 +121,7 @@ export const usePageTab = function () {
   /**
    * 页签移除方法完成操作 :{path: string, home: string}| Record<string, never>
    */
-  const onRemoveDone = ({ path, home }) => {
+  const onRemoveDone = ({ path, home }: any) => {
     if (path) {
       push(path);
     } else if (home) {
@@ -134,7 +133,7 @@ export const usePageTab = function () {
    * 更新页签数据
    * @param data 页签数据
    */
-  const setPageTabs = (data) => {
+  const setPageTabs = (data: TabItemType[]) => {
     themeStore.setTabs(data);
   };
 
@@ -149,7 +148,7 @@ export const usePageTab = function () {
    * 添加页签
    * @param data 页签数据
    */
-  const addPageTab = (data) => {
+  const addPageTab = (data: TabItemType) => {
     themeStore.tabAdd(data);
   };
 
@@ -157,7 +156,7 @@ export const usePageTab = function () {
    * 修改页签
    * @param data 页签数据
    */
-  const setPageTab = (data) => {
+  const setPageTab = (data: TabItemType) => {
     themeStore.tabSetItem(data);
   };
 
@@ -165,8 +164,8 @@ export const usePageTab = function () {
    * 修改当前页签标题
    * @param title 标题
    */
-  const setPageTabTitle = (title) => {
-    setPageTab({ key: getRouteTabKey(), title });
+  const setPageTabTitle = (title: string) => {
+    setPageTab({ key: getRouteTabKey(), title } as TabItemType);
   };
 
   /**
@@ -181,7 +180,7 @@ export const usePageTab = function () {
    * 登录成功后跳转首页
    * @param from 登录前的地址
    */
-  const goHomeRoute = (from) => {
+  const goHomeRoute = (from?: any) => {
     replace(from ? decodeURIComponent(from) : HOME_ROUTE);
   };
 

@@ -51,6 +51,7 @@ export function getMenuRoutes(menus, homePath) {
       childs.push(temp); // 需要外层布局的路由
     }
   });
+  console.log('getMenuRoutes：', routes);
   return routes;
 }
 

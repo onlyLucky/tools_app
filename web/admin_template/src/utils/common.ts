@@ -72,3 +72,59 @@ export function toFormData(params: any) {
   });
   return formData;
 }
+
+/**
+ * 格式化树形数据
+ * @param data 需要格式化的数据
+ * @param formatter 格式器
+ * @param childrenField children 字段名
+ * @param resultChildrenField 格式化后的 children 字段名
+ */
+export function mapTree<T, R>(data: T[], formatter: (item: T, index: number, parent?: R) => R, childrenField: string = "children", resultChildrenField: string = "children", parent?: R): R[] {
+  let result: R[] = [];
+  if (data && data.length) {
+    data.forEach((d, i) => {
+      const item = formatter(d, i, parent);
+      if (item) {
+        const children = (d as unknown as { [key: string]: any })[childrenField];
+        if (children != null && Array.isArray(children)) {
+          (item as unknown as { [key: string]: any })[resultChildrenField] = mapTree(
+            children,
+            formatter,
+            childrenField,
+            resultChildrenField,
+            item
+          );
+        }
+        result.push(item);
+      }
+    });
+  }
+  return result;
+}
+
+/**
+ * 判断是否是外链
+ * @param url 地址
+ */
+export function isExternalLink(url?: string | null): boolean {
+  return !!(url && (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("//")));
+}
+
+/**
+ * 遍历树形形式数据
+ * @param data 需要遍历的数据
+ * @param callback 回调
+ * @param childrenField children 字段名
+ */
+export function eachTree<T>(data?: T[], callback?: (item: T, index: number, parent?: T) => void | boolean, childrenField: string = "children", parent?: T): void {
+  if (data) {
+    data.forEach((d, i) => {
+      var _a;
+      if (callback && callback(d, i, parent) !== false && ((_a = (d as unknown as { [key: string]: any })[childrenField]) == null ? void 0 : _a.length)) {
+        eachTree((d as unknown as { [key: string]: any })[childrenField], callback, childrenField, d);
+      }
+    });
+  }
+}
+

@@ -126,6 +126,7 @@ function formatMenus(data, childField = 'children') {
     },
     childField
   );
+  console.log('formatMenus: ', menus);
   return { menus, homePath, homeTitle };
 }
 

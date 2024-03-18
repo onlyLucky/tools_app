@@ -4,7 +4,8 @@
 import NProgress from 'nprogress';
 import { createRouter, createWebHistory } from 'vue-router';
 import { setPageTitle } from '@/utils/page-title-util';
-import { routes } from './routers';
+import { useUserStore } from '@/store/modules/user';
+import { routes, getMenuRoutes } from './routers';
 
 NProgress.configure({
   speed: 200,
@@ -39,6 +40,17 @@ router.beforeEach(async (to) => {
     return;
   }
   // 注册动态路由
+  const userStore = useUserStore();
+  if (!userStore.menus) {
+    const { menus, homePath } = await userStore.fetchUserInfo();
+    console.log("router.index", menus, homePath)
+    if (menus) {
+      getMenuRoutes(menus, homePath).forEach((r: any) => {
+        router.addRoute(r);
+      });
+      return { ...to, replace: true };
+    }
+  }
 });
 
 router.afterEach(() => {

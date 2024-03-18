@@ -103,13 +103,13 @@ function changeTheme(value: string | undefined, dark: boolean): Promise<void> {
 
 /* 页签栏单个对象类型 */
 export interface TabItemType {
-  closable: boolean;
-  components: string[];
-  fullPath: string;
-  home: boolean;
-  refresh: any;
-  key: string;
-  meta: {
+  closable?: boolean;
+  components?: string[];
+  fullPath?: string;
+  home?: boolean;
+  refresh?: any;
+  key?: string | undefined;
+  meta?: {
     hide: boolean;
     icon: string;
     keepAlive: boolean;
@@ -120,8 +120,8 @@ export interface TabItemType {
     title: string;
 
   };
-  path: string;
-  title: string;
+  path?: string;
+  title?: string;
 }
 
 export const useThemeStore = defineStore({

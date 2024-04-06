@@ -4,6 +4,7 @@ import { resolve } from 'path';
 import Compression from 'vite-plugin-compression';
 import Components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
+import postCssPxToRem from 'postcss-pxtorem'
 
 // https://vitejs.dev/config/
 /* export default defineConfig({
@@ -15,7 +16,6 @@ interface AliasObject {
 }
 
 export default defineConfig(({ command }) => {
-  console.log("command:====", command)
   const isBuild = command === 'build';
   // 添加类型别名
   const alias: AliasObject = {
@@ -54,9 +54,22 @@ export default defineConfig(({ command }) => {
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `@use "@/styles/variables.scss" as *;`
+          additionalData: `
+            @use "@/styles/variables.scss" as *;
+            @use "@/styles/mixin.scss" as *;
+          `
         }
-      }
+      },
+      /* postcss: {
+        plugins: [
+          postCssPxToRem({
+            // 自适应，px>rem转换
+            rootValue: 192, // 1920 设计图
+            propList: ['*'], // 需要转换的属性，这里选择全部都进行转换
+            selectorBlackList: ['norem'], // 过滤掉norem-开头的class，不进行rem转换，这个内容可以不写
+          }),
+        ],
+      }, */
     },
     // 配置依赖优化的行为 Vite 会自动将所有 JavaScript 依赖项打包到单个文件中，这可以减少加载时间和带宽使用，提高应用程序的性能
     optimizeDeps: {

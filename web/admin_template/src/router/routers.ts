@@ -43,7 +43,6 @@ export function getMenuRoutes(menus: MenuItem[], homePath: string | null | undef
       children: child
     }
   ];
-  console.log("getMenuRoutes: ===", menus)
   // 路由铺平处理
   eachTree(menuToRoutes(menus, getComponent), (route) => {
     const temp = Object.assign({}, route, { children: void 0 });

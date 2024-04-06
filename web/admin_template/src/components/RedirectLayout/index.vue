@@ -2,7 +2,11 @@
 <template>
   <div></div>
 </template>
-
+<script lang="ts">
+export default {
+  name: 'RedirectLayout',
+};
+</script>
 <script setup lang="ts">
   import { useRouter, useRoute } from 'vue-router';
   import { storeToRefs } from 'pinia';

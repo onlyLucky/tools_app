@@ -8,16 +8,17 @@
 
 @mixin scrollBar {
   &::-webkit-scrollbar-track-piece {
-    background: #d3dce6;
+    background: transparent;
   }
 
   &::-webkit-scrollbar {
-    width: 6px;
+    width: 9px;
+    height: 9px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #99a9bf;
-    border-radius: 20px;
+    background: #cfcfcf;
+    border-radius: 9px;
   }
 }
 
@@ -27,7 +28,86 @@
   height: 100%;
 }
 
-@mixin size($w,$h){
-  width: $w;
-  height: $h;
+@mixin size($width: 100%, $height: 100%) {
+  width: $width;
+  height: $height;
 }
+
+// 定义一个 mixin 以便复用
+@mixin ellipsis_multiline($lines: 1) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical; /* 或者使用 -ms-flexbox 方案: display: -ms-flexbox; -ms-flex-wrap: wrap; -ms-flex-pack: start; -ms-flex-line-pack: end; */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+// 基础 Flex 容器
+.f {
+  display: flex;
+}
+
+// 禁止缩放
+.f-d-z {
+  flex: 0 0 auto;
+}
+
+// 允许缩放
+.f-z {
+  flex: 1 1 auto;
+}
+
+// 允许换行
+.f-w {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@mixin flex($direction: row, $justify: flex-start, $align: flex-start) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+$direction-map:(
+  row: row,
+  col: column,
+  rr: row-reverse,
+  cr: column-reverse
+);
+// justify-content
+$justify-map:(
+  s: flex-start,
+  e: flex-end,
+  c: center,
+  b: space-between,
+  a: space-around
+);
+// align-items
+$align-map:(
+  s: flex-start,
+  e: flex-end,
+  c: center,
+);
+// 主轴方向
+@each $kd, $vd in $direction-map {
+  .f-#{$kd} {
+    display: flex;
+    flex-direction: $vd;
+  }
+  @each $kj, $vj in $justify-map {
+    .f-#{$kd}-#{$kj} {
+      display: flex;
+      flex-direction: $vd;
+      justify-content: $vj;
+    }
+    @each $ka, $va in $align-map {
+      .f-#{$kd}-#{$kj}-#{$ka} {
+        @include flex($vd, $vj, $va);
+      }
+    }
+  }
+}
+

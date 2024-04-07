@@ -81,3 +81,15 @@
   )
 );
 
+// sidebar
+$sideBarWidth: 220px;
+$sideBarIconWidth: 84px;
+$headerHeight: 54px;
+$darkBg: #001529;
+
+:export {
+  sideBarWidth: $sideBarWidth;
+  sideBarIconWidth: $sideBarIconWidth;
+  headerHeight: $headerHeight;
+  darkBg: $darkBg;
+}

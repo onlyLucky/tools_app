@@ -2,13 +2,15 @@
   <div class="admin_layout">
     <div class="admin_header">
       <div class="admin_header_logo">
-        <img src="/src/assets/logo.png" style="width: 42px; height: 42px" />
-        <h1 style="font-size: 17px; letter-spacing: 1px">{{ PROJECT_NAME }}</h1>
+        <img src="/src/assets/logo.png" />
+        <h1>{{ PROJECT_NAME }}</h1>
       </div>
-      <div class="admin_header_tools">tools</div>
-      <div class="admin_header_breadcrumb"></div>
-      <div class="admin_header_menus"></div>
-      <div class="admin_header_tools"></div>
+      <div class="admin_header_opt">
+        <div class="admin_header_tools">tools</div>
+        <div class="admin_header_breadcrumb"></div>
+        <div class="admin_header_menus"></div>
+        <div class="admin_header_tools"></div>
+      </div>
     </div>
     <div class="admin_main">
       <div class="admin_main_sidebar">sidebar</div>
@@ -37,6 +39,36 @@ import RouterLayout from '@/components/RouterLayout/index.vue';
 <style scoped lang="scss">
 .admin_layout{
   @include size(100vw, 100vh);
-  background-color: pink;
+  background: var(--el-bg-color-page);
+  .admin_header{
+    @include size(100%, $headerHeight);
+    @extend .f-row-c-c;
+    .admin_header_logo{
+      @include size($sideBarWidth, 100%);
+      @extend .f-row-c-c;
+      background: $darkBg;
+      img{
+        @include size(42px, 42px);
+        margin-right: 10px;
+      }
+      h1{
+        font-size: 17px;
+        letter-spacing: 1px;
+        color: #fff;
+        font-weight: 500;
+      }
+    }
+    .admin_header_opt{
+      @include size(calc(100% - #{$sideBarWidth}), 100%);
+      background: #fff;
+      border-bottom: 1px solid #f0f0f0;
+      .admin_header_tools{
+        flex-shrink: 0;
+      }
+    }
+  }
+  .admin_main{
+    @include size(100%, calc(100% - #{$headerHeight}));
+  }
 }
 </style>

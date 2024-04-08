@@ -6,7 +6,12 @@
         <h1>{{ PROJECT_NAME }}</h1>
       </div>
       <div class="admin_header_opt">
-        <div class="admin_header_tools">tools</div>
+        <div class="admin_header_tools">
+          <HeaderTool>
+            <svg-icon icon="test"></svg-icon>
+          </HeaderTool>
+          <svg-icon icon="https://media.flaticon.com/dist/min/img/collection-empty.svg"></svg-icon>
+        </div>
         <div class="admin_header_breadcrumb"></div>
         <div class="admin_header_menus"></div>
         <div class="admin_header_tools"></div>
@@ -35,6 +40,7 @@ export default {
 <script setup lang="ts">
 import { PROJECT_NAME } from '@/config/setting';
 import RouterLayout from '@/components/RouterLayout/index.vue';
+import HeaderTool from '@/components/common/HeaderTool.vue';
 </script>
 <style scoped lang="scss">
 .admin_layout{

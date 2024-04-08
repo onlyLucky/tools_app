@@ -1,10 +1,11 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { resolve } from 'path';
+import path, { resolve } from 'path';
 import Compression from 'vite-plugin-compression';
 import Components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 import postCssPxToRem from 'postcss-pxtorem'
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 
 // https://vitejs.dev/config/
 /* export default defineConfig({
@@ -44,10 +45,22 @@ export default defineConfig(({ command }) => {
         ext: '.gz'
       })
     );
+
   } else {
     // 开发环境全局安装
     alias['./as-needed'] = './global-import';
   }
+  // svg 图标
+  plugins.push(
+    createSvgIconsPlugin({
+      // 要缓存的图标文件夹
+      iconDirs: [path.resolve(__dirname, 'src/assets/icons')], //svg图片存放的目录
+      // 执行 icon name 的格式
+      symbolId: 'icon-[name]',
+      inject: "body-last", // 插入的位置
+      customDomId: "__svg__icons__dom__" // svg的id
+    })
+  )
   return {
     resolve: { alias },
     plugins,

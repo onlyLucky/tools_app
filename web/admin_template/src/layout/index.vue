@@ -6,14 +6,19 @@
         <h1>{{ PROJECT_NAME }}</h1>
       </div>
       <div class="admin_header_opt">
-        <div class="admin_header_tools">tools</div>
+        <div class="admin_header_tools">
+          <HeaderTool>
+            <svg-icon icon="test" size="14px"></svg-icon>
+          </HeaderTool>
+          <!-- <svg-icon icon="https://media.flaticon.com/dist/min/img/collection-empty.svg"></svg-icon> -->
+        </div>
         <div class="admin_header_breadcrumb"></div>
         <div class="admin_header_menus"></div>
         <div class="admin_header_tools"></div>
       </div>
     </div>
     <div class="admin_main">
-      <div class="admin_main_sidebar">sidebar</div>
+      <div class="admin_main_sidebar">sidebar1231</div>
       <div class="admin_main_body">
         <div class="admin_body_tabs"></div>
         <div class="admin_body_content">
@@ -35,6 +40,7 @@ export default {
 <script setup lang="ts">
 import { PROJECT_NAME } from '@/config/setting';
 import RouterLayout from '@/components/RouterLayout/index.vue';
+import HeaderTool from '@/components/common/HeaderTool.vue';
 </script>
 <style scoped lang="scss">
 .admin_layout{
@@ -62,8 +68,12 @@ import RouterLayout from '@/components/RouterLayout/index.vue';
       @include size(calc(100% - #{$sideBarWidth}), 100%);
       background: #fff;
       border-bottom: 1px solid #f0f0f0;
+      @extend .f;
       .admin_header_tools{
         flex-shrink: 0;
+        padding: 0 12px;
+        box-sizing: border-box;
+        @extend .f-row-c-c;
       }
     }
   }
